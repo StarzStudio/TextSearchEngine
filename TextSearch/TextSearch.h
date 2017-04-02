@@ -11,9 +11,6 @@
 //                 xzhou118@syr.edu                                   //
 ////////////////////////////////////////////////////////////////////////
 
-
-
-
 #include <string>
 #include <iostream>
 #include <vector>
@@ -35,9 +32,10 @@ public:
 	}
 	TextSearch() {
 		defaultBlockingQueue = NULL;
+		_pBlockingqueue = NULL;
 	//	defaultAlgorithm = NULL;
 		//_pSearchAlgorithm = NULL;
-		_pBlockingqueue = NULL;
+		
 	}
 	~TextSearch() {
 		if (defaultBlockingQueue != NULL)

@@ -85,7 +85,6 @@ int main()
 
 #ifdef normalCPP
 
-	std::string textPattern = "Kmp";
 
 	// two way to init TextSearch:
 	// first:

@@ -37,11 +37,11 @@ void TextSearch::TextSearch::searchTotal() {
 }
 
 int TextSearch::search(std::string _fileName) {
-	if (_fileName == "") return -1;
+	if (_fileName == "" || _fileName == "endOfTextSearch") return -1;
 	//if (_pSearchAlgorithm == NULL) return -1;
 	std::ifstream ifs(_fileName);
 	if (!ifs.good()) {
-		std::cout << "file couldn't be found or opened" << std::endl;
+		std::cout << "file: " << _fileName << " couldn't be found or opened" << std::endl;
 		return -1;
 	}
 	// load content from file to string

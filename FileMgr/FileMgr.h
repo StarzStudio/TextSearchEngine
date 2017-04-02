@@ -74,8 +74,9 @@ namespace FileManager
 
 		virtual ~FileMgr() { 
 			// CoUninitialize();
-
-			delete pText;
+			 if (!pText) {
+				 delete pText;
+			 }
 		}
 
 		//----< set default file pattern >-------------------------------
@@ -84,7 +85,7 @@ namespace FileManager
 		{
 			patterns_.push_back("*.*");
 			pInstance_ = this;
-			// initTextSearchComponent();
+			//initTextSearchComponent();
 			initNormalTextSearchEngine();
 
 		}
@@ -112,10 +113,10 @@ namespace FileManager
 			{
 				pEvtHandler->execute(f);
 			}
-			//CComBSTR temp(f.c_str());
-			//BSTR fileName = temp.Detach();
-			////std::cout << "\n  --   " << f;
-			//HRESULT hr = pTextSearchEngine->putFile(fileName);
+			/*CComBSTR temp(f.c_str());
+			BSTR fileName = temp.Detach();
+			std::cout << "\n  --   " << f;
+			HRESULT hr = pTextSearchEngine->putFile(fileName);*/
 			pText->putFile(f);
 		}
 		//----< applications can overload this or reg for dirEvt >-------
@@ -126,7 +127,7 @@ namespace FileManager
 			{
 				pEvtHandler->execute(fpath);
 			}
-			//std::cout << "\n  ++ " << fpath;
+			std::cout << "\n  ++ " << fpath;
 		}
 		//----< applications can overload this or reg for doneEvt >------
 
@@ -138,7 +139,7 @@ namespace FileManager
 			}
 			std::string endSignal("endOfTextSearch");
 			pText->putFile(endSignal);
-			/*CComBSTR temp(endSignal.c_str());
+	/*		CComBSTR temp(endSignal.c_str());
 			BSTR signal = temp.Detach();
 			HRESULT hr = pTextSearchEngine->putFile(signal);*/
 		}
@@ -198,10 +199,10 @@ namespace FileManager
 			pText = new TextSearch("algorithm");
 			pText->searchTotal();
 		}
-		int initTextSearchComponent() {
-			
-			
 
+
+		int initTextSearchComponent() {
+		
 			HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 			if (!SUCCEEDED(hr))
 			{
@@ -219,7 +220,7 @@ namespace FileManager
 				}
 				else {
 					CComBSTR path(L"..");
-					CComBSTR pattern(L"algorithm");
+					CComBSTR pattern(L"include");
 
 					VARIANT_BOOL result = 0;
 					hr = pTextSearchEngine->init_engine(pattern);
@@ -231,6 +232,7 @@ namespace FileManager
 					}
 					else {
 						std::wcout << L"\n     init textSearch component failed\n\n";
+						return -1;
 					}
 				}
 			}
@@ -241,6 +243,7 @@ namespace FileManager
 			}
 			std::wcout << L"\n\n";
 			
+			return 1;
 		}
 
 

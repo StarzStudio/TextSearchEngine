@@ -66,7 +66,9 @@ int main()
 	std::wcout << L"\n\n";
 
 
-
+	int i;
+	std::cin >> i ;
+	//CoUninitialize();
     return 0;
 }
 
