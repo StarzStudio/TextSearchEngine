@@ -1,0 +1,37 @@
+// TextSearchComponent.idl : IDL source for TextSearchComponent
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TextSearchComponent.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(5D8CE5CD-D8CF-4DF4-BC69-5578E01CFFB1),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IComTextSearch : IDispatch{
+	[id(1), helpstring("find whether a file contains a pattern")] HRESULT search([in] BSTR in_fileName, [in] BSTR in_pattern, [out, retval] VARIANT_BOOL* result);
+	[id(2), helpstring("start dequeuing fileName from queue and search pattern in that file")] HRESULT init_engine([in] BSTR in_pattern);
+	[id(3), helpstring("put a fileName into queue")] HRESULT putFile([in] BSTR in_fileName);
+};
+[
+	uuid(88581FFB-C90C-49E1-9E5B-12CBD7DD2EF4),
+	version(1.0),
+]
+library TextSearchComponentLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(0885E972-47EB-47CB-91C4-1C68EAB91291)		
+	]
+	coclass ComTextSearch
+	{
+		[default] interface IComTextSearch;
+	};
+};
+

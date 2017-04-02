@@ -1,0 +1,37 @@
+// FileMgrComponent.idl : IDL source for FileMgrComponent
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (FileMgrComponent.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(2D530C52-E205-4272-83CB-978029CBDF55),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface ICComFileMgr : IDispatch{
+	[id(1)] HRESULT addPattern(BSTR in_pattern);
+	[id(2)] HRESULT addPath(BSTR in_path);
+	[id(3), helpstring("start searching files")] HRESULT search();
+};
+[
+	uuid(9766764A-96E3-4739-A08F-9AD876B8B3DE),
+	version(1.0),
+]
+library FileMgrComponentLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(CBE1535F-6927-41DA-9590-CC1573925F1F)		
+	]
+	coclass CComFileMgr
+	{
+		[default] interface ICComFileMgr;
+	};
+};
+
