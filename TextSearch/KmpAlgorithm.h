@@ -33,13 +33,14 @@ public:
 		}
 	}
 
-	int search(std::string txt) {
-
+	int search(std::string txt,  std::string in_fileName) {
+		currentFileInSearch = in_fileName;
 		// simulate operation of DFA on text
 		int m = pat.length();
 		int n = txt.length();
 		int i, j;
 		for (i = 0, j = 0; i < n && j < m; i++) {
+			if (txt[i] < 0) return -2;
 			j = dfa[txt[i]][j];
 		}
 		if (j == m) return i - m;    // found
@@ -50,8 +51,13 @@ public:
 	void switchPattern(std::string in_pattern) {
 		pat = in_pattern;
 	}
+
+	std::string getCurrentFileInSearch() {
+		return currentFileInSearch;
+	}	
 private:
 	int R;
+	std::string currentFileInSearch;
 	std::vector<std::vector<int>> dfa;
 	std::string pat; // sub string to be searched inside main string
 

@@ -21,6 +21,8 @@ void TextSearch::TextSearch::searchTotal() {
 			if (dequeuedFile == "endOfTextSearch")
 			{
 				//(*callback)(this->matchedFilesCollection);
+				std::cout << "  find " << this->matchedFilesCollection.size() <<
+					" files that contains the input string" << std::endl;
 				for (auto fileName : this->matchedFilesCollection) {
 					std::cout << fileName << std::endl;
 				}
@@ -36,7 +38,7 @@ void TextSearch::TextSearch::searchTotal() {
 
 int TextSearch::search(std::string _fileName) {
 	if (_fileName == "") return -1;
-	if (_pSearchAlgorithm == NULL) return -1;
+	//if (_pSearchAlgorithm == NULL) return -1;
 	std::ifstream ifs(_fileName);
 	if (!ifs.good()) {
 		std::cout << "file couldn't be found or opened" << std::endl;
@@ -45,7 +47,23 @@ int TextSearch::search(std::string _fileName) {
 	// load content from file to string
 	std::string content((std::istreambuf_iterator<char>(ifs)),
 		(std::istreambuf_iterator<char>()));
-	return _pSearchAlgorithm->search(content);
+
+
+	if (content.find(_pattern) < content.size())
+	{
+		return 1;
+	}
+	else {
+		return -1;
+	}
+	/*int result = _pSearchAlgorithm->search(content, _fileName);
+	if (result == -1) {
+		return result;
+	}
+	else {
+		std::cout << "vector out index error caused on file: " << _pSearchAlgorithm->getCurrentFileInSearch() << std::endl;
+	} */
+	 
 }
 
 #ifdef TEST_TEXTSEARCH
@@ -64,7 +82,7 @@ int main()
 
 	TextSearch exe;
 
-	exe.loadSearchAlgorithm(pAlgorithm);
+	//exe.loadSearchAlgorithm(pAlgorithm);
 
 	int result = exe.search(file);
 	if (result == -1) {

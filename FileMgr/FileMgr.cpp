@@ -194,7 +194,6 @@ int main()
 	pFmgr->addPattern("*.cpp");
 	pFmgr->search();
 
-	putline();
 
 	std::cout << "\n\n";
 

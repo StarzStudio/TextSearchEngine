@@ -16,8 +16,8 @@
 
 class SearchAlgorithm {
 public:
-	virtual int search(std::string mainString) = 0;
-	
+	virtual int search(std::string searchContent, std::string currentInSearchingFileName) = 0;
+	virtual std::string getCurrentFileInSearch() = 0;
 };
 
 #endif

@@ -57,14 +57,26 @@ namespace FileManager
 	class FileMgr : public IFileMgr
 	{
 	public:
-		using patterns = std::vector<std::string>;
+		using Pattern = std::string;
+		using Patterns = std::vector<Pattern>;
 		using File = std::string;
+		using Files = std::vector<File>;
 		using Dir = std::string;
+		using Dirs = std::vector<Dir>;
+		using Path = std::string;
 		using fileSubscribers = std::vector<IFileEventHandler*>;
 		using dirSubscribers = std::vector<IDirEventHandler*>;
 		using doneSubscribers = std::vector<IDoneEventHandler*>;
 
-		virtual ~FileMgr() { CoUninitialize(); }
+
+	
+
+
+		virtual ~FileMgr() { 
+			// CoUninitialize();
+
+			delete pText;
+		}
 
 		//----< set default file pattern >-------------------------------
 
@@ -72,7 +84,9 @@ namespace FileManager
 		{
 			patterns_.push_back("*.*");
 			pInstance_ = this;
-			initTextSearchComponent();
+			// initTextSearchComponent();
+			initNormalTextSearchEngine();
+
 		}
 		//----< return instance of FileMgr >-----------------------------
 
@@ -98,10 +112,11 @@ namespace FileManager
 			{
 				pEvtHandler->execute(f);
 			}
-			CComBSTR temp(f.c_str());
-			BSTR fileName = temp.Detach();
-			//std::cout << "\n  --   " << f;
-			HRESULT hr = pTextSearchEngine->putFile(fileName);
+			//CComBSTR temp(f.c_str());
+			//BSTR fileName = temp.Detach();
+			////std::cout << "\n  --   " << f;
+			//HRESULT hr = pTextSearchEngine->putFile(fileName);
+			pText->putFile(f);
 		}
 		//----< applications can overload this or reg for dirEvt >-------
 
@@ -122,9 +137,10 @@ namespace FileManager
 				pEvtHandler->execute(numFilesProcessed);
 			}
 			std::string endSignal("endOfTextSearch");
-			CComBSTR temp(endSignal.c_str());
+			pText->putFile(endSignal);
+			/*CComBSTR temp(endSignal.c_str());
 			BSTR signal = temp.Detach();
-			HRESULT hr = pTextSearchEngine->putFile(signal);
+			HRESULT hr = pTextSearchEngine->putFile(signal);*/
 		}
 		//----< start search on previously specified path >--------------
 
@@ -137,24 +153,27 @@ namespace FileManager
 
 		void find(const std::string& path)
 		{
-			std::string fpath = FileSystem::Path::getFullFileSpec(path);
+			Path fpath = FileSystem::Path::getFullFileSpec(path);
 			dir(fpath);
 			for (auto patt : patterns_)
 			{
-				std::vector<std::string> files = FileSystem::Directory::getFiles(fpath, patt);
+				Files files = FileSystem::Directory::getFiles(fpath, patt);
 				for (auto f : files)
 				{
-					file(f);
+					// This _file name is with relative path as suffix
+					File _file = FileSystem::Path::fileSpec(path, f);
+					file(_file);
 				}
 			}
-			std::vector<std::string> dirs = FileSystem::Directory::getDirectories(fpath);
+			Dirs dirs = FileSystem::Directory::getDirectories(fpath);
 			for (auto d : dirs)
 			{
 				if (d == "." || d == "..")
 					continue;
-				std::string dpath = fpath + "\\" + d;
+				Path dpath = fpath + "\\" + d;
 				find(dpath);
 			}
+		
 		}
 		//----< applications use this to register for notification >-----
 
@@ -175,7 +194,14 @@ namespace FileManager
 			doneSubscribers_.push_back(pHandler);
 		}
 
+		void initNormalTextSearchEngine() {
+			pText = new TextSearch("algorithm");
+			pText->searchTotal();
+		}
 		int initTextSearchComponent() {
+			
+			
+
 			HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 			if (!SUCCEEDED(hr))
 			{
@@ -219,15 +245,16 @@ namespace FileManager
 
 
 	private:
-		std::string path_;
-		patterns patterns_;
+		Path path_;
+		Patterns patterns_;
 		size_t numFilesProcessed = 0;
 		fileSubscribers fileSubscribers_;
 		dirSubscribers dirSubscribers_;
 		doneSubscribers doneSubscribers_;
 		static IFileMgr* pInstance_;
-
 		CComQIPtr<IComTextSearch> pTextSearchEngine;
+
+		TextSearch *pText;
 	};
 
 	inline IFileMgr* FileMgrFactory::create(const std::string& path)

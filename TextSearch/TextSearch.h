@@ -26,23 +26,24 @@ class TextSearch {
 	using File = std::string;
 	using WorkItem = std::function<void()>;
 public:
-	TextSearch(std::string pattern) {
+	TextSearch(std::string pattern) : _pattern(pattern) {
+		
 		defaultBlockingQueue = new BlockingQueue<std::string>();
-		defaultAlgorithm = new KmpAlgorithm(pattern);
-		_pSearchAlgorithm = defaultAlgorithm;
+	//	defaultAlgorithm = new KmpAlgorithm(pattern);
+		//_pSearchAlgorithm = defaultAlgorithm;
 		_pBlockingqueue = defaultBlockingQueue;
 	}
 	TextSearch() {
 		defaultBlockingQueue = NULL;
-		defaultAlgorithm = NULL;
-		_pSearchAlgorithm = NULL;
+	//	defaultAlgorithm = NULL;
+		//_pSearchAlgorithm = NULL;
 		_pBlockingqueue = NULL;
 	}
 	~TextSearch() {
 		if (defaultBlockingQueue != NULL)
 			delete defaultBlockingQueue;
-		if (defaultAlgorithm != NULL)
-			delete defaultAlgorithm;
+	/*	if (defaultAlgorithm != NULL)
+			delete defaultAlgorithm;*/
 	}
 
 	void putFile(File in_file) {
@@ -58,18 +59,18 @@ public:
 	void loadBlockingQueue(BlockingQueue<std::string>* in_pq) {
 		_pBlockingqueue = in_pq;
 	}
-	void loadSearchAlgorithm(SearchAlgorithm* in_pSearchAlgorithm) {
+	/*void loadSearchAlgorithm(SearchAlgorithm* in_pSearchAlgorithm) {
 		_pSearchAlgorithm = in_pSearchAlgorithm;
-	}
+	}*/
 
 private:
 	BlockingQueue<std::string>* _pBlockingqueue;
 	BlockingQueue<std::string>* defaultBlockingQueue;
 	//std::string _fileName;
-
+	std::string _pattern;
 	std::vector<std::string> matchedFilesCollection;
-	SearchAlgorithm* _pSearchAlgorithm;
-	SearchAlgorithm* defaultAlgorithm;
+	//SearchAlgorithm* _pSearchAlgorithm;
+	//SearchAlgorithm* defaultAlgorithm;
 	Tasks task;
 };
 
