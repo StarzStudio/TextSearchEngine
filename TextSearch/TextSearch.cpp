@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////
 #include "TextSearch.h"
 
-
+//void(*fptr)(bool flag)
 void TextSearch::TextSearch::searchTotal() {
 	if (_pBlockingqueue == NULL) return;
 	WorkItem  textSearchInSingleFile = [this]()
@@ -25,6 +25,7 @@ void TextSearch::TextSearch::searchTotal() {
 				for (int i = 0; i < this->matchedFilesCollection.size(); i++) {
 					std::cout << this->matchedFilesCollection[i] << std::endl;
 				}
+				//fptr(true);
 				return;
 			}
 			if (this->search(dequeuedFile) != -1) {
@@ -78,7 +79,7 @@ int main()
 {
 	std::string file = "test.txt";
 	std::string pattern = "algorithm";
-	SearchAlgorithm* pAlgorithm = new KmpAlgorithm(pattern);
+
 
 	TextSearch exe;
 

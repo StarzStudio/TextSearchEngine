@@ -18,6 +18,7 @@ interface ICComFileMgr : IDispatch{
 	[id(1)] HRESULT addPattern(BSTR in_pattern);
 	[id(2)] HRESULT addPath(BSTR in_path);
 	[id(3), helpstring("start searching files")] HRESULT search();
+	[id(4), helpstring("inject string to be searched to fileMgr to help it init text search engine")] HRESULT provideTextSearchEngineStringToSearch([in] BSTR in_stringToBeSearched);
 };
 [
 	uuid(9766764A-96E3-4739-A08F-9AD876B8B3DE),

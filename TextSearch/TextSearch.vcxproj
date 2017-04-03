@@ -145,12 +145,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KmpAlgorithm.cpp" />
     <ClCompile Include="TextSearch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="KmpAlgorithm.h" />
-    <ClInclude Include="searchAlgorithm.h" />
     <ClInclude Include="TextSearch.h" />
   </ItemGroup>
   <ItemGroup>

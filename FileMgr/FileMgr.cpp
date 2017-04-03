@@ -63,27 +63,12 @@ struct DoneHandler : IDoneEventHandler
 #define  NO_useCOM_singleFileSearch
 #define  useCOM_wholeFolderSearch
 #define NO_normalCPP
-//class CallBackContext {
-//public:
-//	 friend void callback(std::vector<std::string> in_matchedFilesCollection) {
-//		for (auto fileName : in_matchedFilesCollection) {
-//			std::cout << fileName << std::endl;
-//		}
-//	}
-//
-//
-//};
 
 
 int main()
 {
 
-
-
-
 #ifdef normalCPP
-
-
 	// two way to init TextSearch:
 	// first:
 	TextSearch searchEngine(textPattern);
@@ -94,9 +79,6 @@ int main()
 	searchEngine.loadSearchAlgorithm(pAlgorithm);
 	searchEngine.loadBlockingQueue(&fileNameQueue);*/
 	searchEngine.searchTotal();
-
-
-
 	std::string path = FileSystem::Path::getFullFileSpec("..");
 	IFileMgr* pFmgr = FileMgrFactory::create(path);
 
@@ -173,7 +155,6 @@ int main()
 #endif // using TextSearchComponent
 
 
-
 #ifdef useCOM_wholeFolderSearch
 
 	std::string path = FileSystem::Path::getFullFileSpec("..");
@@ -187,13 +168,17 @@ int main()
 	//pFmgr->regForDirs(&dh);
 	//pFmgr->regForDone(&dnh);
 
+	
 	pFmgr->addPattern("*.h");
 	pFmgr->addPattern("*.cpp");
+	pFmgr->provideTextSearchEngineStringToSearch("algorithm");
 	pFmgr->search();
-
+	
 
 	std::cout << "\n\n";
 
+	int i;
+	std::cin >> i;
 
 
 #endif // using TextSearchComponent and search whole folder

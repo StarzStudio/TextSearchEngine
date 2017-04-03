@@ -1,6 +1,55 @@
-// ComTextSearch.h : Declaration of the CComTextSearch
 
-#pragma once
+#ifndef COMTEXTSEARCH_H
+#define COMTEXTSEARCH_H
+////////////////////////////////////////////////////////////////////////
+//  ComTextSearh.h - Declaration of the CComTextSearch                //
+//  ver 1.0                                                           //
+//  Language:      Visual C++ 2015                                    //
+//  Platform:      Windows 10                                         //
+//  Application:   Text Search Component, 775 DO project 1            //
+//  Author:        Xing Zhou, Syracuse University                     //
+//                 Software Engineering                               //
+//                 xzhou118@syr.edu                                   //
+////////////////////////////////////////////////////////////////////////
+/*
+* Package Operations:
+* -------------------
+* This package wraps TextSearch package as a component and expose to outside as a DLL.
+*
+* Config:
+* -------------------
+* Call init_engine(BSTR) first, it will new a instance for inside pTextSearch pointer and 
+* let pTextSearch start dequeuing on it's default blocking queue.
+*
+* Public interface:
+* ----------------
+* putFile(BSTR)					     put filename into blocking queue.
+* init_engine(BSTR)                   new a TextSearch instance for pTextSearch pointer inside.
+*
+* Build Process:
+* --------------
+* Required files: 
+*                 
+*                 TextSeach.h, TextSeach.cpp
+*				  Tasks.h, Tasks.cpp
+*                 ThreadPool.h, ThreadPool.cpp
+*				  BlockingQueue.h  BlockingQueue.cpp
+*			      Utilities.h, Utilities.cpp
+*
+*
+*
+* Build Command: devenv TextSearch.sln /rebuild debug
+*
+* Maintenance History:
+* --------------------
+* ver 1.0 : 27 Mar 2017
+* - first release
+*
+*/
+
+
+
+
 #include "resource.h"       // main symbols
 
 
@@ -57,9 +106,20 @@ END_COM_MAP()
 public:
 
 	TextSearch* _pTextSearchEngine;
+
+	//----< search a single file >-------------------------------
+
 	STDMETHOD(search)(BSTR in_fileName, BSTR in_pattern, VARIANT_BOOL* result);
+
+	//----< new a instance for _pTextSearchEngine, and let it listening and dequeuing from queue >-------------------------------
+
 	STDMETHOD(init_engine)(BSTR in_pattern);
+
+	//----< push a file into blocking queue >-------------------------------
+
 	STDMETHOD(putFile)(BSTR in_fileName);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ComTextSearch), CComTextSearch)
+
+#endif

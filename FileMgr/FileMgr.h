@@ -1,11 +1,12 @@
-#ifndef FILEMGR_H
+﻿#ifndef FILEMGR_H
 #define FILEMGR_H
-/////////////////////////////////////////////////////////////////////
-// FileMgr.h - find files matching specified patterns              //
-//             on a specified path                                 //
-// ver 2.2                                                         //
-// Jim Fawcett, CSE687 - Object Oriented Design, Spring 2016       //
-/////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+// FileMgr.h - find files matching specified patterns                //
+//             on a specified path                                   //
+// ver 3.0                                                           //
+// Modified by Xing Zhou										     //
+// Author: Jim Fawcett, CSE687 - Object Oriented Design, Spring 2016 //
+///////////////////////////////////////////////////////////////////////
 /*
 * Package Operations:
 * -------------------
@@ -20,11 +21,23 @@
 *
 * The package also provides interface hooks that serve the same purpose
 * but allow multiple receivers for those events.
+
+* Config:
+* -------------------
+* Call provideTextSearchEngineStringToSearch(std::string) to init Text Search Engine before using/
 *
 * Required Files:
 * ---------------
-*   FileMgr.h, FileMgr.cpp, IFileMgr.h,
+*
+*	FileMgr.h, FileMgr.cpp, IFileMgr.h,
 *   FileSystem.h, FileSystem.cpp
+*   TextSearchComponent_i.h， TextSearchComponent_i.c
+*   TextSearch.h, TextSearch.cpp
+*	BlockingQueue.h  BlockingQueue.cpp
+*   Utilities.h, Utilities.cpp
+*	Tasks.h, Tasks.cpp
+*   ThreadPool.h, ThreadPool.cpp
+*  
 *
 * Build Process:
 * --------------
@@ -56,7 +69,6 @@ namespace FileManager
 {
 	class FileMgr : public IFileMgr
 	{
-	public:
 		using Pattern = std::string;
 		using Patterns = std::vector<Pattern>;
 		using File = std::string;
@@ -67,11 +79,7 @@ namespace FileManager
 		using fileSubscribers = std::vector<IFileEventHandler*>;
 		using dirSubscribers = std::vector<IDirEventHandler*>;
 		using doneSubscribers = std::vector<IDoneEventHandler*>;
-
-
-	
-
-
+	public:
 		virtual ~FileMgr() { 
 			CoUninitialize();
 			 if (!pText) {
@@ -83,11 +91,9 @@ namespace FileManager
 
 		FileMgr(const std::string& path) : path_(path)
 		{
+			// default: search anything
 			patterns_.push_back("*.*");
 			pInstance_ = this;
-			initTextSearchComponent();
-			initNormalTextSearchEngine();
-
 		}
 		//----< return instance of FileMgr >-----------------------------
 
@@ -103,6 +109,14 @@ namespace FileManager
 				patterns_.pop_back();
 			patterns_.push_back(patt);
 		}
+
+		//----< provide search string for text Search engine >------
+
+		void provideTextSearchEngineStringToSearch(const std::string& in_stringToBeSearched) {
+		
+			initTextSearchComponent(in_stringToBeSearched);
+		}
+
 		//----< applications can overload this or reg for fileEvt >------
 
 		virtual void file(const File& f)
@@ -208,20 +222,21 @@ namespace FileManager
 			doneSubscribers_.push_back(pHandler);
 		}
 
+		//----< init text search engine object directly >-------------------------------
+
 		void initNormalTextSearchEngine() {
 			pText = new TextSearch("algorithm");
 			pText->searchTotal();
 		}
 
+		//----< inti text search engine component >-------------------------------
 
-		int initTextSearchComponent() {
-		
+		int initTextSearchComponent(std::string in_stringToBeSearched) {
 			HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 			if (!SUCCEEDED(hr))
 			{
 				std::wcout << L"\n  could not initialize COM";
 			}
-
 			try
 			{
 				HRESULT hr;
@@ -233,7 +248,7 @@ namespace FileManager
 				}
 				else {
 					CComBSTR path(L"..");
-					CComBSTR pattern(L"algorithm");
+					BSTR pattern = stdStringTOBSTR(in_stringToBeSearched);
 
 					VARIANT_BOOL result = 0;
 					hr = pTextSearchEngine->init_engine(pattern);
@@ -254,12 +269,21 @@ namespace FileManager
 				return -1;
 			}
 			std::wcout << L"\n\n";
-			
 			return 1;
 		}
 
 
 	private:
+		//----< change std string to BSTR type >-------
+
+		BSTR stdStringTOBSTR(std::string in_string) {
+
+			CComBSTR temp(in_string.c_str());
+			BSTR res = temp.Detach();
+			return res;
+		}
+
+		std::string _stringToBeSearched;
 		Path path_;
 		Patterns patterns_;
 		size_t numFilesProcessed = 0;

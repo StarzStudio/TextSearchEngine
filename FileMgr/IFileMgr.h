@@ -34,6 +34,7 @@ namespace FileManager
 		virtual void regForFiles(IFileEventHandler* pEventHandler) = 0;
 		virtual void regForDirs(IDirEventHandler* pEventHandler) = 0;
 		virtual void regForDone(IDoneEventHandler* pEventHandler) = 0;
+		virtual void provideTextSearchEngineStringToSearch(const std::string& stringToBeSearched) = 0;
 		static IFileMgr* getInstance();
 	};
 

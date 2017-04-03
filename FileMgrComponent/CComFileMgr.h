@@ -1,6 +1,56 @@
-// CComFileMgr.h : Declaration of the CCComFileMgr
+﻿
+#ifndef CCOMFILEMGR_H
+#define CCOMFILEMGR_H
+////////////////////////////////////////////////////////////////////////
+//  CComFileMgr.h - Declaration of the CCComFileMgr                   //
+//  ver 1.0                                                           //
+//  Language:      Visual C++ 2015                                    //
+//  Platform:      Windows 10                                         //
+//  Application:   Text Search Component, 775 DO project 1            //
+//  Author:        Xing Zhou, Syracuse University                     //
+//                 Software Engineering                               //
+//                 xzhou118@syr.edu                                   //
+////////////////////////////////////////////////////////////////////////
+/*
+* Package Operations:
+* -------------------
+* This package wrap the FileMgr static library
+*
+* Config:
+* -------------------
+* 1. call addPath(BSTR) first, it will new a instance for pFileMgr inside and pass the path for it to init.
+* 2. call addPattern(BSTR) to add patterns for fileMgr and call search() to let FileMgr start processing.
+* 3. call provideTextSearchEngineStringToSearch(BSTR) to init text search engine
+* Then we can call search()
+*
+* Public interface:
+* ----------------
+* addPattern(BSTR)        add pattern for fileMgr
+* addPath(BSTR);          add path for fileMgr and new an instance for _pFileMgr
+* search()		          call search method in fileMgr library
+* 
+* Build Process:
+* --------------
+* Required files: 
+*	FileMgr.h, FileMgr.cpp, IFileMgr.h,
+*   FileSystem.h, FileSystem.cpp
+*   TextSearchComponent_i.h， TextSearchComponent_i.c
+*   TextSearch.h, TextSearch.cpp
+*	BlockingQueue.h  BlockingQueue.cpp
+*   Utilities.h, Utilities.cpp
+*	Tasks.h, Tasks.cpp
+*   ThreadPool.h, ThreadPool.cpp
+*
+*					
+* Build Command: devenv TextSearch.sln /rebuild debug
+*
+* Maintenance History:
+* --------------------
+* ver 1.0 : 27 Mar 2017
+* - first release
+*
+*/
 
-#pragma once
 #include "resource.h"       // main symbols
 
 #include "FileMgrComponent_i.h"
@@ -53,11 +103,26 @@ END_COM_MAP()
 public:
 
 	FileMgr * _pFileMgr;
+
+	//----< add pattern for fileMgr >-------
+
 	STDMETHOD(addPattern)(BSTR in_pattern);
+
+	//----< add path for fileMgr and new an instance for _pFileMgr >-------
+
 	STDMETHOD(addPath)(BSTR in_path);
+
+	//----< call search method in  fileMgr >-------
+
 	STDMETHOD(search)();
+
+	//----< inject string to be searched for fileMgr to help it init text search engine >-------
+
+	STDMETHOD(provideTextSearchEngineStringToSearch)(BSTR in_stringToBeSearched);
 };
 
 
 
 OBJECT_ENTRY_AUTO(__uuidof(CComFileMgr), CCComFileMgr)
+
+#endif
