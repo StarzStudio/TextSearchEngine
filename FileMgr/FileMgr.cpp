@@ -37,8 +37,6 @@ struct FileHandler : IFileEventHandler
 	{
 		std::cout << "\n  --   " << fileSpec;
 	}
-
-	
 };
 
 struct DirHandler : IDirEventHandler
@@ -181,13 +179,13 @@ int main()
 	std::string path = FileSystem::Path::getFullFileSpec("..");
 	IFileMgr* pFmgr = FileMgrFactory::create(path);
 
-	FileHandler fh;
-	DirHandler dh;
-	DoneHandler dnh;
+	//FileHandler fh;
+	//DirHandler dh;
+	//DoneHandler dnh;
 
-	pFmgr->regForFiles(&fh);
-	pFmgr->regForDirs(&dh);
-	pFmgr->regForDone(&dnh);
+	//pFmgr->regForFiles(&fh);
+	//pFmgr->regForDirs(&dh);
+	//pFmgr->regForDone(&dnh);
 
 	pFmgr->addPattern("*.h");
 	pFmgr->addPattern("*.cpp");

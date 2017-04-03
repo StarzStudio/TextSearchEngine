@@ -18,13 +18,12 @@ void TextSearch::TextSearch::searchTotal() {
 		while (true)
 		{
 			std::string dequeuedFile = _pBlockingqueue->deQ();
-			if (dequeuedFile == "endOfTextSearch")
+			if (!dequeuedFile.compare(std::string("endOfTextSearch")))
 			{
 				//(*callback)(this->matchedFilesCollection);
-				std::cout << "  find " << this->matchedFilesCollection.size() <<
-					" files that contains the input string" << std::endl;
-				for (auto fileName : this->matchedFilesCollection) {
-					std::cout << fileName << std::endl;
+				std::cout << "  find " << this->matchedFilesCollection.size() << " files that contains the input string" << std::endl;
+				for (int i = 0; i < this->matchedFilesCollection.size(); i++) {
+					std::cout << this->matchedFilesCollection[i] << std::endl;
 				}
 				return;
 			}
@@ -37,7 +36,8 @@ void TextSearch::TextSearch::searchTotal() {
 }
 
 int TextSearch::search(std::string _fileName) {
-	if (_fileName == "" || _fileName == "endOfTextSearch") return -1;
+	
+
 	//if (_pSearchAlgorithm == NULL) return -1;
 	std::ifstream ifs(_fileName);
 	if (!ifs.good()) {
@@ -49,7 +49,7 @@ int TextSearch::search(std::string _fileName) {
 		(std::istreambuf_iterator<char>()));
 
 
-	if (content.find(_pattern) < content.size())
+	if (content.find(_pattern) != std::string::npos)
 	{
 		return 1;
 	}

@@ -73,7 +73,7 @@ namespace FileManager
 
 
 		virtual ~FileMgr() { 
-			// CoUninitialize();
+			CoUninitialize();
 			 if (!pText) {
 				 delete pText;
 			 }
@@ -85,7 +85,7 @@ namespace FileManager
 		{
 			patterns_.push_back("*.*");
 			pInstance_ = this;
-			//initTextSearchComponent();
+			initTextSearchComponent();
 			initNormalTextSearchEngine();
 
 		}
@@ -113,11 +113,16 @@ namespace FileManager
 			{
 				pEvtHandler->execute(f);
 			}
-			/*CComBSTR temp(f.c_str());
+			CComBSTR temp(f.c_str());
 			BSTR fileName = temp.Detach();
+			
+			HRESULT hr = pTextSearchEngine->putFile(fileName);
+			if (!SUCCEEDED(hr))
+			{
+				std::cout << "\n  could not put file name: " << f << " into queue";
+			}
 			std::cout << "\n  --   " << f;
-			HRESULT hr = pTextSearchEngine->putFile(fileName);*/
-			pText->putFile(f);
+			//pText->putFile(f);
 		}
 		//----< applications can overload this or reg for dirEvt >-------
 
@@ -127,7 +132,10 @@ namespace FileManager
 			{
 				pEvtHandler->execute(fpath);
 			}
-			std::cout << "\n  ++ " << fpath;
+			if (fpath.find(".git") ==  std::string::npos) {
+				std::cout << "\n  ++ " << fpath;
+			}
+			
 		}
 		//----< applications can overload this or reg for doneEvt >------
 
@@ -138,10 +146,15 @@ namespace FileManager
 				pEvtHandler->execute(numFilesProcessed);
 			}
 			std::string endSignal("endOfTextSearch");
-			pText->putFile(endSignal);
-	/*		CComBSTR temp(endSignal.c_str());
+			//pText->putFile(endSignal);
+			CComBSTR temp(endSignal.c_str());
 			BSTR signal = temp.Detach();
-			HRESULT hr = pTextSearchEngine->putFile(signal);*/
+			HRESULT hr = pTextSearchEngine->putFile(signal);
+			if (!SUCCEEDED(hr))
+			{
+				std::wcout << L"\n  could not put end signal into queue";
+			}
+			std::cout << "\n\n  Processed " << numFilesProcessed << " files";
 		}
 		//----< start search on previously specified path >--------------
 
@@ -220,7 +233,7 @@ namespace FileManager
 				}
 				else {
 					CComBSTR path(L"..");
-					CComBSTR pattern(L"include");
+					CComBSTR pattern(L"algorithm");
 
 					VARIANT_BOOL result = 0;
 					hr = pTextSearchEngine->init_engine(pattern);
@@ -228,7 +241,6 @@ namespace FileManager
 					if (SUCCEEDED(hr))
 					{
 						std::wcout << L"\n    init textSearch component successful\n\n";
-
 					}
 					else {
 						std::wcout << L"\n     init textSearch component failed\n\n";
