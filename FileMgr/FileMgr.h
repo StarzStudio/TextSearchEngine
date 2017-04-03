@@ -81,6 +81,7 @@ namespace FileManager
 		using doneSubscribers = std::vector<IDoneEventHandler*>;
 	public:
 		virtual ~FileMgr() { 
+
 			CoUninitialize();
 			 if (!pText) {
 				 delete pText;

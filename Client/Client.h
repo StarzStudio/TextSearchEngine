@@ -133,34 +133,7 @@ public:
 
 	//----< call this function init FileMgr Component >-------
 
-	int initFileMgrComponent() {
-
-		HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-		if (!SUCCEEDED(hr))
-		{
-			std::wcout << L"\n  could not initialize COM";
-		}
-		try
-		{
-			pFileMgrComponent.CoCreateInstance(CLSID_CComFileMgr);
-			if (!pFileMgrComponent)
-			{
-				std::wcout << "\n  failed to create file manager component";
-				return -1;
-			}
-			/*else {
-				
-			}*/
-		}
-		catch (std::exception& ex)
-		{
-			std::wcout << L"\n  " << ex.what() << L"\n\n";
-			return -1;
-		}
-		std::wcout << L"\n\n";
-
-		return 0;		
-	}
+	int initFileMgrComponent();
 private:
 
 	//----< change std string to BSTR type >-------

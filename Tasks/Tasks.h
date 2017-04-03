@@ -5,7 +5,6 @@
 // ver 1.1                                                               //
 // Language:      C++, Visual Studio 2015                                //
 // Platform:      Mac Book Pro, OS X EI Captain 10.11                    //
-// Application:   dependency Analysis, 687 OOD Project3                  //
 // Author:        Xing Zhou, Syracuse University, Software Engineering   //
 //                xzhou118@syr.edu                                       //
 ///////////////////////////////////////////////////////////////////////////
