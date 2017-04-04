@@ -61,6 +61,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "../Logger/Logger.h"
 
 class Client{
 	
@@ -70,6 +71,8 @@ class Client{
 public:
 	Client() {
 		initFileMgrComponent();
+		logger.attach(&std::cout);
+		logger.start();
 	}
 	~Client() {
 		CoUninitialize();
@@ -81,15 +84,16 @@ public:
 	
 			BSTR patternBSTR = stdStringTOBSTR(in_pattern);
 			HRESULT hr = pFileMgrComponent->addPattern(patternBSTR);
-
+			std::string msg;
 			if (!SUCCEEDED(hr))
 			{
-				std::wcout << L"\n   file manager add pattern: \"" << patternBSTR <<  L"\" failed\n\n";
+				msg = "\n   file manager add pattern: \"" + in_pattern +  "\" failed\n\n";
 				return;
 			}
 			else {
-				std::wcout << L"\n   file manager add pattern: \"" << patternBSTR << L"\" successful\n\n";
+				msg = "\n   file manager add pattern: \"" + in_pattern + "\" successful\n\n";
 			}
+			logger.write(msg);
 		
 	}
 
@@ -100,13 +104,15 @@ public:
 	
 		BSTR pathBSTR = stdStringTOBSTR(in_path);
 		HRESULT hr = pFileMgrComponent->addPath(pathBSTR);
+		std::string msg;
 		if (!SUCCEEDED(hr))
 		{
-			std::wcout << L"\n    init file manager component with path: \"" << pathBSTR << L"\" failed\n\n";
+			msg = "\n    init file manager component with path: \"" + in_path + "\" failed\n\n";
 		}
 		else {
-			std::wcout << L"\n    init file manager component with path: \"" << pathBSTR << L"\" successful\n\n";
+			msg = "\n    init file manager component with path: \"" + in_path +  "\" successful\n\n";
 		}
+		logger.write(msg);
 	}
 
 	//----< provide string to be search for FileMgr Component to init text search engine >-------
@@ -114,20 +120,21 @@ public:
 	void provideTextSearchEngineStringToSearch(std::string in_stringToBeSearched) {
 		BSTR stringToBeSearched = this->stdStringTOBSTR(in_stringToBeSearched);
 		HRESULT hr = pFileMgrComponent->provideTextSearchEngineStringToSearch(stringToBeSearched);
-
+		std::string msg;
 		if (!SUCCEEDED(hr))
 		{
-			std::wcout << L"\n    provide searched string: \"" << stringToBeSearched << L"\" for text search engine failed\n\n";
+			msg = "\n    provide searched string: \"" + in_stringToBeSearched + "\" for text search engine failed\n\n";
 		}
 		else {
-			std::wcout << L"\n    provide searched string: \"" << stringToBeSearched << L"\" for text search engine successful\n\n";
+			msg = "\n    provide searched string: \"" + in_stringToBeSearched + "\" for text search engine successful\n\n";
 		}
+		logger.write(msg);
 	}
 
 	//----< call this function to let FileMgr Component start processing >-------
 
 	void search() {
-			pFileMgrComponent->search();
+		pFileMgrComponent->search();
 	}
 
 	//----< call this function init FileMgr Component >-------
@@ -144,5 +151,6 @@ private:
 		return res;
 	}
 	CComQIPtr<ICComFileMgr> pFileMgrComponent;
+	Logger logger;
 };
 #endif

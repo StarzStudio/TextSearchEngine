@@ -157,9 +157,6 @@ int main()
 
 #ifdef useCOM_wholeFolderSearch
 
-	Show::attach(&std::cout);
-	Show::start();
-	Show::write("\n");
 
 	std::string path = FileSystem::Path::getFullFileSpec("..");
 	IFileMgr* pFmgr = FileMgrFactory::create(path);
@@ -180,10 +177,8 @@ int main()
 	
 
 	std::cout << "\n\n";
-
-	int i;
-	std::cin >> i;
-
+	// wait all the file to be dequeued and print out their results
+	::Sleep(2000);
 
 #endif // using TextSearchComponent and search whole folder
 

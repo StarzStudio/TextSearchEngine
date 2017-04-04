@@ -32,13 +32,20 @@ void TextSearch::TextSearch::searchTotal() {
 			if (!dequeuedFile.compare(std::string("endOfTextSearch")))
 			{
 				//(*callback)(this->matchedFilesCollection);
-				msg = "  find " + std::to_string(this->matchedFilesCollection.size()) + " files that contains the input string: " + _pattern + "\n";
+				msg = "  find " + std::to_string(this->matchedFilesCollection.size()) + " files that contains the input string: \"" + _pattern + "\"\n";
 				logger.write(msg);
 				for (int i = 0; i < this->matchedFilesCollection.size(); i++) {
-					msg = this->matchedFilesCollection[i] + "\n";
+					msg = " - " + this->matchedFilesCollection[i] + "\n";
 					logger.write(msg);
 				}
-				msg = "  Please keep waiting processing to completed \n";
+				msg ="\n\n  Please keep waiting processing to complete... \n";
+				logger.write(msg);
+				using namespace std::chrono_literals;
+				msg = "  ............ \n";
+				std::this_thread::sleep_for(400ms);
+				logger.write(msg);
+				msg = "  ...... \n";
+				std::this_thread::sleep_for(400ms);
 				logger.write(msg);
 				//fptr(true);
 				logger.stop();

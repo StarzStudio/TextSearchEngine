@@ -70,7 +70,7 @@
 #include "../Logger/Logger.h"
 
 using namespace ATL;
-using Show = StaticLogger<0>;
+
 namespace FileManager
 {
 	class FileMgr : public IFileMgr
@@ -96,11 +96,15 @@ namespace FileManager
 
 		//----< set default file pattern >-------------------------------
 
-		FileMgr(const std::string& path) : path_(path)
+		FileMgr(const std::string& path)
 		{
 			// default: search anything
+			path_ = FileSystem::Path::getFullFileSpec(path);
 			patterns_.push_back("*.*");
 			pInstance_ = this;
+			logger.attach(&std::cout);
+			logger.start();
+			pText = NULL;
 		}
 		//----< return instance of FileMgr >-----------------------------
 
@@ -141,10 +145,10 @@ namespace FileManager
 			if (!SUCCEEDED(hr))
 			{
 				msg = "\n  could not put file name: " + f + " into queue";
-				Show::write(msg);
+				logger.write(msg);
 			}
-			msg =  "\n< putting file: " + f + " into blocking queue >";
-			Show::write(msg);
+			msg =  "\n> enqueue file: " + f;
+			logger.write(msg);
 			//std::cout << "\n  --   putting file: " << f << " into blocking queue";
 			//pText->putFile(f);
 		}
@@ -178,12 +182,13 @@ namespace FileManager
 			if (!SUCCEEDED(hr))
 			{
 				msg = "\n  could not put end signal into queue";
-				Show::write(msg);
+				logger.write(msg);
 		
 			}
 			
-			msg =  "\n\n  Processed " + std::to_string(numFilesProcessed) + " files\n\n";
-			Show::write(msg);
+			msg =  "\n\n  Processed " + std::to_string(numFilesProcessed) + " files in the path: \"" + 
+				path_ + "\" \n\n";
+			logger.write(msg);
 			
 			return;
 		}
@@ -255,7 +260,7 @@ namespace FileManager
 			if (!SUCCEEDED(hr))
 			{
 				msg = "\n  could not initialize COM";
-				Show::write(msg);
+				logger.write(msg);
 			}
 			try
 			{
@@ -264,7 +269,7 @@ namespace FileManager
 				if (!pTextSearchEngine)
 				{
 					msg =  "\n  failed to create Text search component";
-					Show::write(msg);
+					logger.write(msg);
 					return -1;
 				}
 				else {
@@ -277,11 +282,11 @@ namespace FileManager
 					if (SUCCEEDED(hr))
 					{
 						msg = "\n   init textSearch component successful\n\n";
-						Show::write(msg);
+						logger.write(msg);
 					}
 					else {
 						msg =  "\n   init textSearch component failed\n\n";
-						Show::write(msg);
+						logger.write(msg);
 						return -1;
 					}
 				}
@@ -305,12 +310,7 @@ namespace FileManager
 			BSTR res = temp.Detach();
 			return res;
 		}
-		/*void cleanOStream() {
-			dst.clear();
-			dst.str("");
-			dst.seekp(0);
-		}*/
-		//std::ostringstream dst;
+		Logger logger;
 		std::string _stringToBeSearched;
 		Path path_;
 		Patterns patterns_;

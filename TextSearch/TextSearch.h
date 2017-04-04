@@ -75,8 +75,8 @@ public:
 		_pBlockingqueue = NULL;
 	}
 	~TextSearch() {
-		if (defaultBlockingQueue != NULL)
-			delete defaultBlockingQueue;
+		/*if (defaultBlockingQueue != NULL)
+			delete defaultBlockingQueue;*/
 	}
 
 	//----< push a file into blocking queue >-------------------------------

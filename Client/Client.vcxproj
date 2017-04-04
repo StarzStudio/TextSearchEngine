@@ -147,13 +147,15 @@
   <ItemGroup>
     <ClInclude Include="..\FileMgrComponent\FileMgrComponent_i.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\FileMgrComponent\FileMgrComponent_i.c" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.vcxproj">
+      <Project>{b68b4259-1718-41cd-82eb-44e6c9f9cdd9}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

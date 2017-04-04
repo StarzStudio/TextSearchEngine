@@ -43,6 +43,8 @@ int Client::initFileMgrComponent() {
 
 int main()
 {
+
+
 	Client c;
 	std::string path = "..";
 	std::string pattern1 = "*.h";
@@ -54,8 +56,9 @@ int main()
 	c.provideTextSearchEngineStringToSearch(stringToBeSearched);
 	c.search();
 
-
+	
 	// wait all the file to be dequeued and print out their results
-	::Sleep(5000);
+	::Sleep(3000);
+	exit(0);
 }
 
