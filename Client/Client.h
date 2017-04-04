@@ -128,7 +128,6 @@ public:
 
 	void search() {
 			pFileMgrComponent->search();
-		
 	}
 
 	//----< call this function init FileMgr Component >-------

@@ -66,7 +66,11 @@
 #include <atlbase.h>
 #include <atlsafe.h>
 #include <iostream>
+#include <sstream>
+#include "../Logger/Logger.h"
+
 using namespace ATL;
+using Show = StaticLogger<0>;
 namespace FileManager
 {
 	class FileMgr : public IFileMgr
@@ -85,7 +89,7 @@ namespace FileManager
 		virtual ~FileMgr() { 
 
 			CoUninitialize();
-			 if (!pText) {
+			 if (pText) {
 				 delete pText;
 			 }
 		}
@@ -97,7 +101,6 @@ namespace FileManager
 			// default: search anything
 			patterns_.push_back("*.*");
 			pInstance_ = this;
-			textSearchEngineFinishProcessing = false;
 		}
 		//----< return instance of FileMgr >-----------------------------
 
@@ -125,7 +128,7 @@ namespace FileManager
 
 		virtual void file(const File& f)
 		{
-			
+			std::string msg;
 			++numFilesProcessed;
 			for (auto pEvtHandler : fileSubscribers_)
 			{
@@ -137,9 +140,12 @@ namespace FileManager
 			HRESULT hr = pTextSearchEngine->putFile(fileName);
 			if (!SUCCEEDED(hr))
 			{
-				std::cout << "\n  could not put file name: " << f << " into queue";
+				msg = "\n  could not put file name: " + f + " into queue";
+				Show::write(msg);
 			}
-		//	std::cout << "\n  --   " << f;
+			msg =  "\n< putting file: " + f + " into blocking queue >";
+			Show::write(msg);
+			//std::cout << "\n  --   putting file: " << f << " into blocking queue";
 			//pText->putFile(f);
 		}
 		//----< applications can overload this or reg for dirEvt >-------
@@ -159,6 +165,7 @@ namespace FileManager
 
 		virtual void done()
 		{
+			std::string msg;
 			for (auto pEvtHandler : doneSubscribers_)
 			{
 				pEvtHandler->execute(numFilesProcessed);
@@ -170,13 +177,14 @@ namespace FileManager
 			HRESULT hr = pTextSearchEngine->putFile(signal);
 			if (!SUCCEEDED(hr))
 			{
-				std::wcout << L"\n  could not put end signal into queue";
+				msg = "\n  could not put end signal into queue";
+				Show::write(msg);
+		
 			}
-			std::cout << "\n\n  Processed " << numFilesProcessed << " files\n\n";
-
-			while (!textSearchEngineFinishProcessing) {
-				
-			}
+			
+			msg =  "\n\n  Processed " + std::to_string(numFilesProcessed) + " files\n\n";
+			Show::write(msg);
+			
 			return;
 		}
 		//----< start search on previously specified path >--------------
@@ -241,10 +249,13 @@ namespace FileManager
 		//----< inti text search engine component >-------------------------------
 
 		int initTextSearchComponent(std::string in_stringToBeSearched) {
+
+			std::string msg;
 			HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 			if (!SUCCEEDED(hr))
 			{
-				std::wcout << L"\n  could not initialize COM";
+				msg = "\n  could not initialize COM";
+				Show::write(msg);
 			}
 			try
 			{
@@ -252,7 +263,8 @@ namespace FileManager
 				pTextSearchEngine.CoCreateInstance(CLSID_ComTextSearch);
 				if (!pTextSearchEngine)
 				{
-					std::wcout << "\n  failed to create Text search component";
+					msg =  "\n  failed to create Text search component";
+					Show::write(msg);
 					return -1;
 				}
 				else {
@@ -264,10 +276,12 @@ namespace FileManager
 
 					if (SUCCEEDED(hr))
 					{
-						std::wcout << L"\n   init textSearch component successful\n\n";
+						msg = "\n   init textSearch component successful\n\n";
+						Show::write(msg);
 					}
 					else {
-						std::wcout << L"\n   init textSearch component failed\n\n";
+						msg =  "\n   init textSearch component failed\n\n";
+						Show::write(msg);
 						return -1;
 					}
 				}
@@ -291,7 +305,12 @@ namespace FileManager
 			BSTR res = temp.Detach();
 			return res;
 		}
-
+		/*void cleanOStream() {
+			dst.clear();
+			dst.str("");
+			dst.seekp(0);
+		}*/
+		//std::ostringstream dst;
 		std::string _stringToBeSearched;
 		Path path_;
 		Patterns patterns_;
@@ -303,7 +322,7 @@ namespace FileManager
 		CComQIPtr<IComTextSearch> pTextSearchEngine;
 
 		TextSearch *pText;
-		bool textSearchEngineFinishProcessing;
+		//bool textSearchEngineFinishProcessing;
 	};
 
 	inline IFileMgr* FileMgrFactory::create(const std::string& path)

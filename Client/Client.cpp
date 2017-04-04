@@ -54,6 +54,8 @@ int main()
 	c.provideTextSearchEngineStringToSearch(stringToBeSearched);
 	c.search();
 
-	::Sleep(100);
+
+	// wait all the file to be dequeued and print out their results
+	::Sleep(5000);
 }
 

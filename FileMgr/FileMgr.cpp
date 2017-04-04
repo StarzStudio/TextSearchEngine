@@ -157,6 +157,10 @@ int main()
 
 #ifdef useCOM_wholeFolderSearch
 
+	Show::attach(&std::cout);
+	Show::start();
+	Show::write("\n");
+
 	std::string path = FileSystem::Path::getFullFileSpec("..");
 	IFileMgr* pFmgr = FileMgrFactory::create(path);
 

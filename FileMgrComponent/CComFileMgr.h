@@ -95,7 +95,7 @@ END_COM_MAP()
 
 	void FinalRelease()
 	{
-		if (!_pFileMgr) {
+		if (_pFileMgr) {
 			delete _pFileMgr;
 		}
 	}

@@ -10,22 +10,38 @@
 ////////////////////////////////////////////////////////////////////////
 #include "TextSearch.h"
 
+
 //void(*fptr)(bool flag)
+
 void TextSearch::TextSearch::searchTotal() {
+	
 	if (_pBlockingqueue == NULL) return;
+	std::string msg;
+	logger.attach(&std::cout);
+	logger.start();
 	WorkItem  textSearchInSingleFile = [this]()
 	{
+		
+		std::ostringstream dst;
+		dst << "\n  working thread " << std::this_thread::get_id() << " start dequeueing and processing \n";
+		std::string msg = dst.str();
+		logger.write(msg);
 		while (true)
 		{
 			std::string dequeuedFile = _pBlockingqueue->deQ();
 			if (!dequeuedFile.compare(std::string("endOfTextSearch")))
 			{
 				//(*callback)(this->matchedFilesCollection);
-				std::cout << "  find " << this->matchedFilesCollection.size() << " files that contains the input string" << std::endl;
+				msg = "  find " + std::to_string(this->matchedFilesCollection.size()) + " files that contains the input string: " + _pattern + "\n";
+				logger.write(msg);
 				for (int i = 0; i < this->matchedFilesCollection.size(); i++) {
-					std::cout << this->matchedFilesCollection[i] << std::endl;
+					msg = this->matchedFilesCollection[i] + "\n";
+					logger.write(msg);
 				}
+				msg = "  Please keep waiting processing to completed \n";
+				logger.write(msg);
 				//fptr(true);
+				logger.stop();
 				return;
 			}
 			if (this->search(dequeuedFile) != -1) {
@@ -42,7 +58,9 @@ int TextSearch::search(std::string _fileName) {
 	//if (_pSearchAlgorithm == NULL) return -1;
 	std::ifstream ifs(_fileName);
 	if (!ifs.good()) {
-		std::cout << "file: " << _fileName << " couldn't be found or opened" << std::endl;
+		
+		//std::cout << "file: " << _fileName << " couldn't be found or opened" << std::endl;
+		//Show::write("file: " + _fileName + " couldn't be found or opened\n");
 		return -1;
 	}
 	// load content from file to string
@@ -76,18 +94,30 @@ int main()
 	std::string file = "test.txt";
 	std::string pattern = "algorithm";
 
+	std::ostringstream dst;
 
 	TextSearch exe;
+
+
+	Show::attach(&std::cout);
+	Show::start();
+	Show::write("\n");
+
+	
 
 	//exe.loadSearchAlgorithm(pAlgorithm);
 
 	int result = exe.search(file);
 	if (result == -1) {
-		std::cout << "pattern doesn't exist" << std::endl;
+		dst << "pattern doesn't exist\n" ;
+		Show::write(dst.str());
 	}
 	else {
-		std::cout << "pattern starts at position " << result << std::endl;
+		dst << "pattern starts at position \n";
+		Show::write(dst.str());
 	}
+
+	Show::stop("\n  stopping static logger");
     return 0;
 }
 

@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D00CAAB9-8A09-41F8-87EF-E8AE3DCBEC09}</ProjectGuid>
+    <ProjectGuid>{B68B4259-1718-41CD-82EB-44E6C9F9CDD9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>TextSearch</RootNamespace>
+    <RootNamespace>Logger</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -87,7 +87,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);zTEST_TEXTSEARCH;zTEST_KMP</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;zTEST_LOGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,21 +145,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TextSearch.cpp" />
+    <ClInclude Include="Cpp11-BlockingQueue.h" />
+    <ClInclude Include="Logger.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TextSearch.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BlockingQueue\BlockingQueue.vcxproj">
-      <Project>{c8b01e44-a73a-4d2a-8549-2420a9ed0a19}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Logger\Logger.vcxproj">
-      <Project>{b68b4259-1718-41cd-82eb-44e6c9f9cdd9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Tasks\Tasks.vcxproj">
-      <Project>{b8063bbf-036e-425e-a4d1-8980a15e908a}</Project>
-    </ProjectReference>
+    <ClCompile Include="Cpp11-BlockingQueue.cpp" />
+    <ClCompile Include="Logger.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

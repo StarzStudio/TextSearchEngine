@@ -52,12 +52,14 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-
+#include <sstream>
 
 // user header 
-// depend on Blockingqueue, Tasks
 #include "../BlockingQueue/BlockingQueue.h"
 #include "../Tasks/Tasks.h"
+#include "../Logger/Logger.h"
+
+
 
 class TextSearch {
 	using File = std::string;
@@ -97,6 +99,14 @@ public:
 		_pBlockingqueue = in_pq;
 	}
 private:
+	//----< reset ostringstream >-------------------------------
+	
+	//void cleanOStream() {
+	//	dst.clear();
+	//	dst.str("");
+	//	//dst.seekp(0);
+	//}
+	Logger logger;
 	BlockingQueue<std::string>* _pBlockingqueue;
 	BlockingQueue<std::string>* defaultBlockingQueue;
 	std::string _pattern;
