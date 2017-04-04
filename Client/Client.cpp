@@ -54,7 +54,6 @@ int main()
 	c.provideTextSearchEngineStringToSearch(stringToBeSearched);
 	c.search();
 
-	int i;
-	std::cin >> i;
+	::Sleep(100);
 }
 

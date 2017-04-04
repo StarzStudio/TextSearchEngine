@@ -84,11 +84,11 @@ public:
 
 			if (!SUCCEEDED(hr))
 			{
-				std::wcout << L"\n   file manager add pattern failed\n\n";
+				std::wcout << L"\n   file manager add pattern: \"" << patternBSTR <<  L"\" failed\n\n";
 				return;
 			}
 			else {
-				std::wcout << L"\n   file manager add pattern successful\n\n";
+				std::wcout << L"\n   file manager add pattern: \"" << patternBSTR << L"\" successful\n\n";
 			}
 		
 	}
@@ -102,10 +102,10 @@ public:
 		HRESULT hr = pFileMgrComponent->addPath(pathBSTR);
 		if (!SUCCEEDED(hr))
 		{
-			std::wcout << L"\n     init  file manager component failed\n\n";
+			std::wcout << L"\n    init file manager component with path: \"" << pathBSTR << L"\" failed\n\n";
 		}
 		else {
-			std::wcout << L"\n    init file manager component successful\n\n";
+			std::wcout << L"\n    init file manager component with path: \"" << pathBSTR << L"\" successful\n\n";
 		}
 	}
 
@@ -117,10 +117,10 @@ public:
 
 		if (!SUCCEEDED(hr))
 		{
-			std::wcout << L"\n     provide searched string for text search engine failed\n\n";
+			std::wcout << L"\n    provide searched string: \"" << stringToBeSearched << L"\" for text search engine failed\n\n";
 		}
 		else {
-			std::wcout << L"\n    provide searched string for text search engine successful\n\n";
+			std::wcout << L"\n    provide searched string: \"" << stringToBeSearched << L"\" for text search engine successful\n\n";
 		}
 	}
 

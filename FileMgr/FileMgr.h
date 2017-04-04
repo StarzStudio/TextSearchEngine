@@ -45,6 +45,8 @@
 *
 * Maintenance History:
 * --------------------
+* ver 3.0 : 03 Apr 2017
+* - will call text search component
 * ver 2.2 : 28 Aug 2016
 * - added more prologue comments
 * ver 2.1 : 31 Jul 2016
@@ -95,6 +97,7 @@ namespace FileManager
 			// default: search anything
 			patterns_.push_back("*.*");
 			pInstance_ = this;
+			textSearchEngineFinishProcessing = false;
 		}
 		//----< return instance of FileMgr >-----------------------------
 
@@ -136,7 +139,7 @@ namespace FileManager
 			{
 				std::cout << "\n  could not put file name: " << f << " into queue";
 			}
-			std::cout << "\n  --   " << f;
+		//	std::cout << "\n  --   " << f;
 			//pText->putFile(f);
 		}
 		//----< applications can overload this or reg for dirEvt >-------
@@ -148,7 +151,7 @@ namespace FileManager
 				pEvtHandler->execute(fpath);
 			}
 			if (fpath.find(".git") ==  std::string::npos) {
-				std::cout << "\n  ++ " << fpath;
+			//	std::cout << "\n  ++ " << fpath;
 			}
 			
 		}
@@ -169,7 +172,12 @@ namespace FileManager
 			{
 				std::wcout << L"\n  could not put end signal into queue";
 			}
-			std::cout << "\n\n  Processed " << numFilesProcessed << " files";
+			std::cout << "\n\n  Processed " << numFilesProcessed << " files\n\n";
+
+			while (!textSearchEngineFinishProcessing) {
+				
+			}
+			return;
 		}
 		//----< start search on previously specified path >--------------
 
@@ -256,10 +264,10 @@ namespace FileManager
 
 					if (SUCCEEDED(hr))
 					{
-						std::wcout << L"\n    init textSearch component successful\n\n";
+						std::wcout << L"\n   init textSearch component successful\n\n";
 					}
 					else {
-						std::wcout << L"\n     init textSearch component failed\n\n";
+						std::wcout << L"\n   init textSearch component failed\n\n";
 						return -1;
 					}
 				}
@@ -269,7 +277,7 @@ namespace FileManager
 				std::wcout << L"\n  " << ex.what() << L"\n\n";
 				return -1;
 			}
-			std::wcout << L"\n\n";
+		
 			return 1;
 		}
 
@@ -295,6 +303,7 @@ namespace FileManager
 		CComQIPtr<IComTextSearch> pTextSearchEngine;
 
 		TextSearch *pText;
+		bool textSearchEngineFinishProcessing;
 	};
 
 	inline IFileMgr* FileMgrFactory::create(const std::string& path)

@@ -70,10 +70,6 @@ int TextSearch::search(std::string _fileName) {
 #ifdef TEST_TEXTSEARCH
 
 
-class FileState {
-	//bool canRead() { return _pContext->_pIn->good(); }
-
-};
 
 int main()
 {

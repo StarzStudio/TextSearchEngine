@@ -38,7 +38,7 @@ STDMETHODIMP CComTextSearch::search(BSTR fileName, BSTR pattern, VARIANT_BOOL* r
 }
 
 
-STDMETHODIMP CComTextSearch::init_engine(BSTR in_pattern)
+STDMETHODIMP CComTextSearch::init_engine (BSTR in_pattern)
 {
 	std::string _pattern = BstrToStdString(in_pattern);
 	// TODO: Add your implementation code here
